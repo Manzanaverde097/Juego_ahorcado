@@ -1,48 +1,40 @@
 /// Esta clase se encargara de exportar, leer y cargar las palabras del juego
-library;
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-late SharedPreferences _Palabras;
-void main() {
-  ExportarPalabras aux = ExportarPalabras();
-  
-  aux.confirmacion();
+late SharedPreferences _palabras;
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  _palabras = await SharedPreferences.getInstance();
+  await confirmacion();
   }
 
+Future<void> expalabras() async {
+  await _palabras.setBool('primeravez', true);
+  await _palabras.setStringList('palabras', [
+    'perro',
+    'gato',
+    'casa',
+    'árbol',
+    'coche',
+    'libro',
+    'ciudad',
+    'mariposa',
+    'montaña',
+    'río'
+  ]);
+}
 
-class ExportarPalabras {
-  
-  Future<void> expalabras() async {
-    _Palabras = await SharedPreferences.getInstance();
-    _Palabras.setBool('primeravez', true);
-    _Palabras.setStringList('palabras', [
-      'perro',
-      'gato',
-      'casa',
-      'árbol',
-      'coche',
-      'libro',
-      'ciudad',
-      'mariposa',
-      'montaña',
-      'río'
-    ]);
-  }
-
-  Future<void> confirmacion() async {
-    bool? aux = _Palabras.getBool('primeravez');
-    if (aux != null || aux == true) {
-      return;
-    } 
-    else {
-      _Palabras.setString('primeravez', 'true');
-      expalabras();
-      return;
-    } 
-      
-  }
+Future<void> confirmacion() async {
+  bool? aux = _palabras.getBool('primeravez');
+  if (aux == null || aux == true) {
+    await _palabras.setString('primeravez', 'true');
+    await expalabras();
+    return;
+  } 
+}
 
   List<String> exportarPalabras(){
-    return _Palabras.getStringList('palabras') ?? [];
-  }
-  
+  List<String> aux = _palabras.getStringList('palabras') ?? [];
+  return aux;
 }
+

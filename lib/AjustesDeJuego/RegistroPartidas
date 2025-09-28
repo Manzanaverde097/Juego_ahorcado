@@ -1,30 +1,35 @@
 //aqui voy a hacer el registro de partidas del jugasor despues lo explico bien
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart'; 
 
-class RegistroPartidas{
-  static const String victorias = 'partidasGanadas';
-  static const String perdidas = 'partidasperdidas';
+late SharedPreferences _datos_partidas;
 
-  static Future<int> getVictorias() async {
-    final obtener = await SharedPreferences.getInstance();
-    return obtener.getInt(victorias) ?? 0;
+  Future<void> main() async{
+    WidgetsFlutterBinding.ensureInitialized();
+    _datos_partidas = await SharedPreferences.getInstance();
+    await confirmacion();
   }
 
-  static Future<int> getPerdiste() async {
-    final obtener = await SharedPreferences.getInstance();
-    await obtener.getInt(perdidas) ?? 0;
+  Future<void> confirmacion() async {
+    int? partidasj = _datos_partidas.getInt('PartidasJugadas');
+    if (partidasj == null) {
+      await _datos_partidas.setInt('PartidasJugadas', 0);
+      await _datos_partidas.setInt('PartidasGanadas', 0);
+      await _datos_partidas.setInt('PartidasPerdidas', 0);
+    }
   }
 
-  static Future<void> incrementarPerdidas() async {
-    final obtener = await SharedPreferences.getInstance();
-    int actuales = obtener.getInt(perdidas) ?? 0;
-    await obtener.setInt(perdidas, actuales + 1);
+  int partidasJugadas() {
+    int aux = _datos_partidas.getInt('PartidasJugadas');
+    return aux;
   }
 
-  static Future<void> incrementarvitorias() async {
-    final obtener = await SharedPreferences.getInstance();
-    int actuales = obtener.getInt(victorias) ?? 0;
-    await obtener.setInt(victorias, actuales + 1);
+  int partidasPerdidas() {
+    int aux = _datos_partidas.getInt('PartidasPerdidas');
+    return aux;
   }
-}
 
+  int partidasGanadas() {
+    int aux = _datos_partidas.getInt('PartidasGanadas');
+    return aux;
+  }
