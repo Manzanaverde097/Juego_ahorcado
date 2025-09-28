@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+late SharedPreferences _Mispreferencias;
+
+Future<void> main() async{
+    WidgetsFlutterBinding.ensureInitialized();
+    _Mispreferencias = await SharedPreferences.getInstance();
+    bool aux = await confirmacion();
+    runApp(const MyApp());
+  }
+  
+  Future<bool> confirmacion() async{
+    String? nombre = _Mispreferencias.getString('nombre');
+    if (nombre != "Usuario") {
+      return true;
+    } 
+    else {
+     await _Mispreferencias.setString('nombre', 'Usuario');
+      return false;
+    } 
+  }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
