@@ -19,17 +19,17 @@ late SharedPreferences _datos_partidas;
     }
   }
 
-  int partidasJugadas() {
-    int aux = _datos_partidas.getInt('PartidasJugadas');
+  int? partidasJugadas() {
+    int? aux = _datos_partidas.getInt('PartidasJugadas');
     return aux;
   }
 
-  int partidasPerdidas() {
-    int aux = _datos_partidas.getInt('PartidasPerdidas');
+  int? partidasPerdidas() {
+    int? aux = _datos_partidas.getInt('PartidasPerdidas');
     return aux;
   }
 
-  int partidasGanadas() {
-    int aux = _datos_partidas.getInt('PartidasGanadas');
+  int? partidasGanadas() {
+    int? aux = _datos_partidas.getInt('PartidasGanadas');
     return aux;
   }

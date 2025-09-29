@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-late SharedPreferences _Mispreferencias;
+final _myController = TextEditingController();
+late SharedPreferences _mispreferencias;
+late bool aux;
 
 Future<void> main() async{
     WidgetsFlutterBinding.ensureInitialized();
-    _Mispreferencias = await SharedPreferences.getInstance();
-    bool aux = await confirmacion();
+    _mispreferencias = await SharedPreferences.getInstance();
+     aux = await confirmacion();
     runApp(const MyApp());
   }
   
   Future<bool> confirmacion() async{
-    String? nombre = _Mispreferencias.getString('nombre');
-    if (nombre != "Usuario") {
-      return true;
+    String? nombre = _mispreferencias.getString('nombre');
+    if (nombre != "Usuario" && nombre != null) {
+      return false;
     } 
     else {
-     await _Mispreferencias.setString('nombre', 'Usuario');
-      return false;
+     await _mispreferencias.setString('nombre', 'Usuario');
+      return true;
     } 
   }
 
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 255, 255, 255)),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Ahorcado'),
     );
   }
 }
@@ -52,25 +54,63 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  tooltip: 'Configuración',
+                  onPressed: () {
+                    //AQUI VA BARRA QUE SEA PARA EL PERFIL, Y LAS PARTIDAS JUGADAS
+                  },
       ),
-      body: Center(
+            ]
+      ), 
+            body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+            const Text('Bienvenido al ahoracado'),
+            const SizedBox(height: 20),
+            Visibility(
+                visible: aux,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children:[
+                TextField(
+                  controller: _myController,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Introduce tu nombre',
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      String nombre = _myController.text;
+                      if (nombre.isNotEmpty) {
+                        _mispreferencias.setString('nombre', nombre);
+                        aux = false;
+                        setState(() {});
+                    }
+                  }, child: const Text('Guardar'),
+                  ),
+                ],
+                ),
+              ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              _mispreferencias.getString('nombre')!,
             ),
+            ElevatedButton(
+              onPressed: () {
+
+                ;
+              },
+              child: const Text('Empezar a jugar'),
+              )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }

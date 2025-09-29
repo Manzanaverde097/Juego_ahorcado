@@ -9,7 +9,7 @@ int _intentos = 6;
 
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  _palabras = await exportarPalabras();
+  _palabras = exportarPalabras();
 }
 
 Future iniciarJuego() async{

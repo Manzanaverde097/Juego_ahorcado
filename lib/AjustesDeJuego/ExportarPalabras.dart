@@ -1,4 +1,5 @@
 /// Esta clase se encargara de exportar, leer y cargar las palabras del juego
+library;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 late SharedPreferences _palabras;
