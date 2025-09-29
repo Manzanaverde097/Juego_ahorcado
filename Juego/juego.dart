@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'ExportarPalabras.dart';
 import 'dart:math';
 
@@ -7,16 +7,15 @@ late int _numero;
 late String _palabra;
 int _intentos = 6;
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   _palabras = await exportarPalabras();
 }
 
-Future iniciarJuego() async{
+Future iniciarJuego() async {
   // Lógica para iniciar el juego
   randomizarPalabras();
   _palabra = _palabras[_numero];
-
 }
 
 void randomizarPalabras() {
@@ -27,13 +26,13 @@ void randomizarPalabras() {
 
 bool verificarRespuesta(String respuesta) {
   // Lógica para verificar la respuesta del jugador
-  for (int i = 0; i < _palabra.length; i=i+1) {
+  for (int i = 0; i < _palabra.length; i = i + 1) {
     if (_palabra[i] == respuesta) {
       return true;
-    }   
+    }
   }
-  _intentos= _intentos-1;
-      return false;
+  _intentos = _intentos - 1;
+  return false;
 }
 
 int getIntentos() {

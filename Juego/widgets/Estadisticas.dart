@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../services/Estadisticas.dart';
+
+import '../RegistroPartidas';
 
 class Estadisticas extends StatelessWidget {
   const Estadisticas({super.key});
@@ -8,8 +9,8 @@ class Estadisticas extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Future.wait([
-        RegistroPartidas.getVictorias(),
-        RegistroPartidas.getPerdidas(),
+        RegistroPartidas.getPartidasGanadas(),
+        RegistroPartidas.getPartidasPerdidas(),
       ]),
       builder: (context, AsyncSnapshot<List<int>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -26,38 +27,39 @@ class Estadisticas extends StatelessWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _buildStatBox(
-              context,
-              'VICTORIAS',
-              victorias,
-              Colors.green,
-            ),
-            
+            _buildStatBox(context, 'VICTORIAS', victorias, Colors.green),
+
             const SizedBox(width: 20),
 
-            _buildStatBox(
-              context,
-              'DERROTAS',
-              perdidas,
-              Colors.red,
-            ),
+            _buildStatBox(context, 'DERROTAS', perdidas, Colors.red),
           ],
         );
       },
     );
   }
 
-  Widget _buildStatBox(BuildContext context, String title, int count, Color color) {
+  Widget _buildStatBox(
+    BuildContext context,
+    String title,
+    int count,
+    Color color,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Text(
           title,
-          style: TextStyle(fontSize: 14, color: color, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 14,
+            color: color,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         Text(
           '$count',
-          style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: color),
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium!.copyWith(color: color),
         ),
       ],
     );
