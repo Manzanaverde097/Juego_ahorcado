@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
         actions: <Widget>[
                 IconButton(
                   icon: const Icon(Icons.settings),
