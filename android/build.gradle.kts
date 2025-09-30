@@ -1,4 +1,3 @@
-
 //arregla esto
 allprojects {
     repositories {
