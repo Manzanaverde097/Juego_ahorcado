@@ -1,3 +1,5 @@
+
+//arregla esto
 allprojects {
     repositories {
         google()

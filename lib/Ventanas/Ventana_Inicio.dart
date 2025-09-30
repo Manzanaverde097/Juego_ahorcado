@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:juego_ahorcado/Juego/registroPartidas.dart';
+import 'package:juego_ahorcado/Juego/RegistroPartidas.dart';
 import '../widgets/estadisticas.dart';
 import '../Juego/Usuario.dart';
 
