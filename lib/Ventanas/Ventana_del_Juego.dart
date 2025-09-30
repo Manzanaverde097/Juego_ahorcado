@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:juego_ahorcado/Juego/RegistroPartidas.dart';
 import 'package:juego_ahorcado/Juego/Juego.dart';
+import '../widgets/MunecoAhorcado.dart';
 
+/// Pantalla principal del juego - Interfaz interactiva del ahorcado
+/// Maneja: entrada del usuario, actualización visual y estado del juego
 class Ventana_del_Juego extends StatefulWidget {
   final Juego juego = Juego();
   Ventana_del_Juego({super.key});
@@ -11,18 +14,20 @@ class Ventana_del_Juego extends StatefulWidget {
 }
 
 class _Ventana_del_JuegoState extends State<Ventana_del_Juego> {
-
   late RegistroPartidas registroPartidas;
   String aux = "";
   String intentos = "Intentos: ";
   bool juegoContinua = true;
+  final TextEditingController _textController = TextEditingController();
 
   @override
-  void initState(){inicializarJuego();
+  void initState() {
+    inicializarJuego();
     super.initState();
-    
   }
 
+  /// Registra el resultado de la partida en las estadísticas
+  /// @param juego: true si ganó, false si perdió
   Future<void> cargarRegistro(bool juego) async {
     if (juego) {
       await registroPartidas.incrementarPartidasGanadas();
@@ -32,18 +37,16 @@ class _Ventana_del_JuegoState extends State<Ventana_del_Juego> {
     await registroPartidas.incrementarPartidasJugadas();
   }
 
+  /// Inicializa una nueva partida: carga palabras, reinicia estado y prepara interfaz
   Future<void> inicializarJuego() async {
     await widget.juego.iniciar();
     await widget.juego.iniciarJuego();
     registroPartidas = RegistroPartidas();
     await registroPartidas.cargar();
     setState(() {
-
       aux = widget.juego.getLineas();
-      intentos = "Intentos: "+ widget.juego.getIntentos().toString();
-
+      intentos = "Intentos: " + widget.juego.getIntentos().toString();
     });
-
   }
 
   @override
@@ -57,14 +60,17 @@ class _Ventana_del_JuegoState extends State<Ventana_del_Juego> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              aux,
-              style: TextStyle(fontSize: 18),
-            ),
+            MunecoAhorcado(intentosRestantes: widget.juego.getIntentos()),
+            SizedBox(height: 20),
+            Text(aux, style: TextStyle(fontSize: 18)),
             TextField(
+              controller: _textController,
               decoration: const InputDecoration(
                 labelText: 'Ingresa una letra',
-                contentPadding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 12.0),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: 20.0,
+                  horizontal: 12.0,
+                ),
                 border: OutlineInputBorder(),
               ),
               maxLength: 1,
@@ -83,11 +89,13 @@ class _Ventana_del_JuegoState extends State<Ventana_del_Juego> {
                       }
                     }
                     aux = lineas;
-                  }
-                  else {
-                    intentos = "Intentos: " + widget.juego.getIntentos().toString();
+                  } else {
+                    intentos =
+                        "Intentos: " + widget.juego.getIntentos().toString();
                     if (widget.juego.getIntentos() == 0) {
-                      intentos = "¡Has perdido! La palabra era: " + widget.juego.getPalabra();
+                      intentos =
+                          "¡Has perdido! La palabra era: " +
+                          widget.juego.getPalabra();
                       aux = widget.juego.getPalabra();
                       cargarRegistro(false);
                       setState(() {
@@ -95,15 +103,17 @@ class _Ventana_del_JuegoState extends State<Ventana_del_Juego> {
                       });
                     }
                   }
-                  if (widget.juego.getLetrasAcertadas() == widget.juego.getPalabra().length) {
-                    intentos = "¡Has ganado! ";
+                  if (widget.juego.getLetrasAcertadas() ==
+                      widget.juego.getPalabra().length) {
                     juegoContinua = false;
                     cargarRegistro(true);
                     setState(() {
                       juegoContinua = false;
+                      intentos = "¡Has ganado! ";
                     });
                   }
                 });
+                _textController.clear();
               },
             ),
             Text(intentos),
@@ -113,13 +123,18 @@ class _Ventana_del_JuegoState extends State<Ventana_del_Juego> {
                 setState(() {
                   juegoContinua = true;
                 });
-              }, 
-              child: 
-              const Text('Reiniciar Juego'),
+              },
+              child: const Text('Reiniciar Juego'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 }

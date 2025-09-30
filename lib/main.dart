@@ -3,6 +3,8 @@ import '../Juego/RegistroPartidas.dart';
 import 'Ventanas/Ventana_Inicio.dart';
 import 'Ventanas/ventana_del_Juego.dart';
 
+/// Punto de entrada principal de la aplicación
+/// Configura el material app, rutas y tema visual
 late RegistroPartidas registroPartidas = RegistroPartidas();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +15,11 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  /// Configuración principal de la aplicación:
+  /// - Rutas de navegación ('/' = Inicio, '/juego' = Juego)
+  /// - Tema visual (colores, tipografía)
+  /// - Elimina banner de debug en producción
+
   @override
   Widget build(BuildContextcontext) {
     return MaterialApp(
@@ -23,7 +29,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const Ventana_Inicio(),
-        '/juego': (context) =>  Ventana_del_Juego(),
+        '/juego': (context) => Ventana_del_Juego(),
       },
     );
   }

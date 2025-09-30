@@ -3,8 +3,9 @@ import 'package:juego_ahorcado/Juego/RegistroPartidas.dart';
 import '../widgets/estadisticas.dart';
 import '../Juego/Usuario.dart';
 
+/// Pantalla de inicio principal de la aplicación del Ahorcado
+/// Maneja: perfil de usuario, estadísticas y navegación al juego
 class Ventana_Inicio extends StatefulWidget {
-
   const Ventana_Inicio({super.key});
 
   @override
@@ -13,12 +14,22 @@ class Ventana_Inicio extends StatefulWidget {
 
 class Ventana_InicioState extends State<Ventana_Inicio> {
   Ventana_InicioState();
+
+  /// Controlador para el campo de texto del nombre de usuario
   final TextEditingController _myController = TextEditingController();
+
+  /// Nombre actual del usuario que se muestra en la interfaz
   String _nombreActual = 'Cargando...';
+
+  /// Controla si se muestra el campo para editar el nombre
   bool _mostrarCampoNombre = false;
+
+  /// Instancia del gestor de estadísticas de partidas
   late RegistroPartidas registroPartidas = RegistroPartidas();
-  
+
   late bool aux;
+
+  /// Instancia del gestor de perfil de usuario
   late Usuario usuario = Usuario();
 
   @override
@@ -27,6 +38,8 @@ class Ventana_InicioState extends State<Ventana_Inicio> {
     _cargarNombre();
   }
 
+  /// Carga el nombre del usuario desde SharedPreferences
+  /// Determina si mostrar el campo de edición basado en si es nombre por defecto
   Future<void> _cargarNombre() async {
     await usuario.iniciar();
     final nombre = await usuario.getNombreUsuario();
@@ -37,6 +50,8 @@ class Ventana_InicioState extends State<Ventana_Inicio> {
     });
   }
 
+  /// Muestra un diálogo modal con las estadísticas completas del jugador
+  /// Incluye: nombre, partidas jugadas, victorias y derrotas
   Future<void> _mostrarDialogoEstadisticas(BuildContext context) async {
     await registroPartidas.cargar();
     final Partidas = registroPartidas;
@@ -91,6 +106,8 @@ class Ventana_InicioState extends State<Ventana_Inicio> {
     );
   }
 
+  /// Guarda el nuevo nombre de usuario en SharedPreferences
+  /// Oculta el campo de edición después de guardar
   void _guardarNombre() async {
     final nombre = _myController.text.trim();
     if (nombre.isNotEmpty) {

@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import '../Juego/RegistroPartidas.dart';
 
+/// Widget personalizado que muestra estadísticas en formato visual
+/// Usa FutureBuilder para cargar datos asíncronos de SharedPreferences
 class Estadisticas extends StatelessWidget {
-
   final RegistroPartidas Partidas;
 
-  const Estadisticas({
-    super.key,
-    required this.Partidas,});
+  const Estadisticas({super.key, required this.Partidas});
 
+  /// Muestra victorias y derrotas en cajas coloreadas
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Future.wait([
-    
         this.Partidas.partidasGanadas(),
         this.Partidas.partidasPerdidas(),
       ]),
